@@ -1,0 +1,91 @@
+@startuml
+left to right direction
+
+namespace CrcChecker {
+  class ChunkedFileReader {
+    {static} +ReadFile(string filename, IPerformanceTracer perfTrace): byte[]
+  }
+  
+  class Crc32 {
+    +Crc32(IPerformanceTracer perfTrace)
+	--
+    +ComputeChecksum(byte[] bytes, string filename = null): uint
+	+ComputeChecksumBytes(byte[] bytes): byte[]
+  }
+  
+  class Program {
+    {static} ~Main(string[] args)
+	{static} -PrintDirectorySummary(string rootDirectory)
+	{static} -PrintUsage()
+	{static} -CreateFlatListOfFilesToCheck(string rootDirectory): IEnumerable<string>
+  }
+  
+  Program --> CrcChecker.Common.IPerformanceTracer
+  Program o-- CrcChecker.Optimized.CrcCalculator
+}
+
+namespace CrcChecker.Common {
+  enum PerformanceMarker {
+    FileRead
+	ComputeChecksum
+	CheckFiles
+  }
+
+  interface IPerformanceTracer {
+    Begin(PerformanceMarker performanceMarker, string param0 = null)
+	End(PerformanceMarker performanceMarker, string param0 = null)
+  }
+  
+  interface ICrcCalculator {
+    CheckFiles(IEnumerable<string> filesToCheck, IPerformanceTracer perfTrace)
+  }
+  
+  ICrcCalculator --> IPerformanceTracer
+}
+
+namespace CrcChecker.Optimized {
+  class CrcWork {
+    .. Properties ..
+    +Filename: string
+    +Buffer: byte[] 
+  }
+  
+  class CrcCalculatorJob {
+    -_CrcWorkPool: BlockingCollection<CrcWork>
+	--
+    +CrcCalculatorJob(BlockingCollection<CrcWork> crcWorkPool, Crc32 crc32)
+	--
+	+Start(CancellationToken cancellationToken)
+	-Calculate()
+  }
+  
+  CrcCalculatorJob --> CrcWork
+  CrcCalculatorJob --> CrcChecker.Crc32
+  
+  class CrcCalculator {
+    -_CrcWorkPool: BlockingCollection<CrcWork>
+	--
+    +CrcCalculator(IPerformanceTracer perfTrace)
+	--
+	+CheckFiles(IEnumerable<string> filesToCheck, IPerformanceTracer perfTrace)
+	-CreateAndStartCalculatorJobs(CancellationTokenSource cancellationTokenSource)
+	-AddWork(IEnumerable<string> filesToCheck, IPerformanceTracer perfTrace)
+	-WaitForWorkFinished()
+	-StopCalculatorJobs(CancellationTokenSource cancellationTokenSource)
+  }
+
+  CrcCalculator --> CrcChecker.Common.PerformanceMarker
+  CrcCalculator --> CrcChecker.Common.IPerformanceTracer
+  CrcCalculator o-- CrcChecker.ChunkedFileReader
+  CrcCalculator o-- CrcChecker.Crc32
+  CrcCalculator o-- "2" CrcCalculatorJob
+  CrcCalculator o-- "0..*" CrcWork
+  
+  CrcChecker.Common.ICrcCalculator <|-- CrcCalculator
+}
+
+hide empty members
+hide empty fields
+hide empty methods
+
+@enduml

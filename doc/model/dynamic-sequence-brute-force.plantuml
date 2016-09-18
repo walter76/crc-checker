@@ -1,0 +1,17 @@
+@startuml
+
+Program -> Program: CreateFlatListOfFilesToCheck(rootDirectory)
+
+Program -> PrimitiveCrcCalculator: CheckFiles(flatListOfFilesToCheck)
+
+loop foreach filename
+  PrimitiveCrcCalculator -> ChunkedFileReader: ReadFile(filename, perfTrace)
+  PrimitiveCrcCalculator <-- ChunkedFileReader
+  PrimitiveCrcCalculator -> Crc32: ComputeChecksum(bytes)
+  PrimitiveCrcCalculator <-- Crc32
+  PrimitiveCrcCalculator -> PrimitiveCrcCalculator: Console.WriteLine("{0}, {1}, 0x{2:X}", filename, new FileInfo(filename).Length, checksum)
+end
+
+Program <-- PrimitiveCrcCalculator
+
+@enduml

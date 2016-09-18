@@ -1,0 +1,60 @@
+@startuml
+
+namespace CrcChecker.Common {
+  enum PerformanceMarker {
+    FileRead
+	ComputeChecksum
+	CheckFiles
+  }
+
+  interface IPerformanceTracer {
+    Begin(PerformanceMarker performanceMarker, string param0 = null)
+	End(PerformanceMarker performanceMarker, string param0 = null)
+  }
+  
+  interface ICrcCalculator {
+    CheckFiles(IEnumerable<string> filesToCheck, IPerformanceTracer perfTrace)
+  }
+  
+  ICrcCalculator --> IPerformanceTracer
+}
+
+namespace CrcChecker {
+  class ChunkedFileReader {
+    {static} +ReadFile(string filename, IPerformanceTracer perfTrace): byte[]
+  }
+  
+  class Crc32 {
+    +Crc32(IPerformanceTracer perfTrace)
+	--
+    +ComputeChecksum(byte[] bytes, string filename = null): uint
+	+ComputeChecksumBytes(byte[] bytes): byte[]
+  }
+  
+  class PrimitiveCrcCalculator {
+    +CheckFiles(IEnumerable<string> filesToCheck, IPerformanceTracer perfTrace)
+  }
+  
+  PrimitiveCrcCalculator --> CrcChecker.Common.PerformanceMarker
+  PrimitiveCrcCalculator --> CrcChecker.Common.IPerformanceTracer
+  PrimitiveCrcCalculator o-- ChunkedFileReader
+  PrimitiveCrcCalculator o-- Crc32
+  
+  CrcChecker.Common.ICrcCalculator <|-- PrimitiveCrcCalculator
+  
+  class Program {
+    {static} ~Main(string[] args)
+	{static} -PrintDirectorySummary(string rootDirectory)
+	{static} -PrintUsage()
+	{static} -CreateFlatListOfFilesToCheck(string rootDirectory): IEnumerable<string>
+  }
+  
+  Program --> CrcChecker.Common.IPerformanceTracer
+  Program o-- PrimitiveCrcCalculator
+}
+
+hide empty members
+hide empty fields
+hide empty methods
+
+@enduml

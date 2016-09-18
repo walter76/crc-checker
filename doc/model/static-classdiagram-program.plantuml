@@ -1,0 +1,59 @@
+@startuml
+
+namespace CrcChecker.Common {
+  enum PerformanceMarker {
+    FileRead
+	ComputeChecksum
+	CheckFiles
+  }
+
+  interface IPerformanceTracer {
+    Begin(PerformanceMarker performanceMarker, string param0 = null)
+	End(PerformanceMarker performanceMarker, string param0 = null)
+  }
+
+  class NoTracingPerformanceTracer {
+    +Begin(PerformanceMarker performanceMarker, string param0 = null)
+	+End(PerformanceMarker performanceMarker, string param0 = null)
+  }
+  
+  class ConsolePerformanceTracer {
+    +Begin(PerformanceMarker performanceMarker, string param0 = null)
+	+End(PerformanceMarker performanceMarker, string param0 = null)
+  }
+  
+  class Log4NetPerformanceTracer {
+    +Begin(PerformanceMarker performanceMarker, string param0 = null)
+	+End(PerformanceMarker performanceMarker, string param0 = null)
+  }
+  
+  IPerformanceTracer <|-- NoTracingPerformanceTracer  
+  IPerformanceTracer <|-- ConsolePerformanceTracer
+  IPerformanceTracer <|-- Log4NetPerformanceTracer
+  
+  interface ICrcCalculator {
+    CheckFiles(IEnumerable<string> filesToCheck, IPerformanceTracer perfTrace)
+  }
+  
+  ICrcCalculator --> IPerformanceTracer
+}
+
+namespace CrcChecker {
+  class Program {
+    {static} ~Main(string[] args)
+	{static} -PrintDirectorySummary(string rootDirectory)
+	{static} -PrintUsage()
+	{static} -CreateFlatListOfFilesToCheck(string rootDirectory): IEnumerable<string>
+  }
+  
+  Program --> CrcChecker.Common.IPerformanceTracer
+  Program --> CrcChecker.Common.ICrcCalculator
+  Program o-- CrcChecker.Common.NoTracingPerformanceTracer
+  Program o-- CrcChecker.Common.Log4NetPerformanceTracer
+}
+
+hide empty members
+hide empty fields
+hide empty methods
+
+@enduml

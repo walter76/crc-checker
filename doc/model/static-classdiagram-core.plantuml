@@ -1,0 +1,40 @@
+@startuml
+
+namespace CrcChecker.Common {
+  enum PerformanceMarker {
+    FileRead
+	ComputeChecksum
+	CheckFiles
+  }
+
+  interface IPerformanceTracer {
+    Begin(PerformanceMarker performanceMarker, string param0 = null)
+	End(PerformanceMarker performanceMarker, string param0 = null)
+  }
+}
+
+namespace CrcChecker {
+  class ChunkedFileReader {
+    {static} +ReadFile(string filename, IPerformanceTracer perfTrace): byte[]
+  }
+  
+  ChunkedFileReader --> CrcChecker.Common.PerformanceMarker
+  ChunkedFileReader --> CrcChecker.Common.IPerformanceTracer
+  
+  class Crc32 {
+    +Crc32(IPerformanceTracer perfTrace)
+	--
+    +ComputeChecksum(byte[] bytes, string filename = null): uint
+	+ComputeChecksumBytes(byte[] bytes): byte[]
+  }
+  
+  Crc32 --> CrcChecker.Common.PerformanceMarker
+  Crc32 --> CrcChecker.Common.IPerformanceTracer
+  
+}
+
+hide empty members
+hide empty fields
+hide empty methods
+
+@enduml
