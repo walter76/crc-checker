@@ -5,7 +5,7 @@ using System.IO;
 
 namespace PerfLogAnalyzer
 {
-    class CrcPerformance
+    internal class CrcPerformance
     {
         public string File { get; set; }
         public DateTime FileReadBegin { get; set; }
@@ -14,9 +14,9 @@ namespace PerfLogAnalyzer
         public DateTime ComputeChecksumEnd { get; set; }
     }
 
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        internal static void Main(string[] args)
         {
             if (args.Length < 1)
             {

@@ -1,0 +1,15 @@
+{
+    "version": "1.0.0-*",
+    "frameworks": {
+        "net461": {}
+    },
+    "runtimes": {
+        "win10-x64": {} 
+    },
+    "dependencies": {
+        "Castle.Core": "3.3.3",
+        "Moq": "4.5.22",
+        "NUnit": "3.5.0",
+        "CrcChecker": "1.0.0-*"
+    }
+}
