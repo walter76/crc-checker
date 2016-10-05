@@ -1,10 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Runtime.InteropServices;
 
-namespace FileIoPerformanceComparer
+namespace FileIoPerformanceComparer.BinaryReaderMethods
 {
-    internal class PinnedBufferChunkedFileReader
+    internal class FileStreamFileReader
     {
         public static byte[] ReadFile(string filename)
         {
@@ -12,16 +11,12 @@ namespace FileIoPerformanceComparer
             var buffer = new byte[length];
             GCHandle bufferGcHandle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
 
-            using (var binaryReader =
-                new BinaryReader(
-                    new FileStream(filename, FileMode.Open, FileAccess.Read)))
+            using (var fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read))
             {
-                long pos = 0L;
+                int pos = 0;
                 while (pos < length)
                 {
-                    var chunk = binaryReader.ReadBytes(512);
-                    Array.Copy(chunk, 0L, buffer, pos, chunk.LongLength);
-                    pos += chunk.LongLength;
+                    pos += fileStream.Read(buffer, pos, buffer.Length - pos);
                 }
             }
 

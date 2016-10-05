@@ -77,10 +77,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BinaryReaderViewModel.cs" />
-    <Compile Include="ChunkedFileReader.cs" />
-    <Compile Include="FileReadAllBytesFileReader.cs" />
-    <Compile Include="FileStreamFileReader.cs" />
-    <Compile Include="PinnedBufferChunkedFileReader.cs" />
+    <Compile Include="BinaryReaderMethods\ChunkedFileReader.cs" />
+    <Compile Include="BinaryReaderMethods\FileReadAllBytesFileReader.cs" />
+    <Compile Include="BinaryReaderMethods\FileStreamFileReader.cs" />
+    <Compile Include="BinaryReaderMethods\PinnedBufferChunkedFileReader.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="ResultViewModel.cs" />
     <Compile Include="ViewModelBase.cs" />

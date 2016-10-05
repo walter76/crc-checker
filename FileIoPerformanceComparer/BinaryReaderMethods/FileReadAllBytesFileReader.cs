@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace FileIoPerformanceComparer
+namespace FileIoPerformanceComparer.BinaryReaderMethods
 {
     internal class FileReadAllBytesFileReader
     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using FileIoPerformanceComparer.BinaryReaderMethods;
+using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
