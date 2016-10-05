@@ -34,6 +34,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -76,6 +77,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BinaryReaderMethods\Win32FileIOReader.cs" />
     <Compile Include="BinaryReaderViewModel.cs" />
     <Compile Include="BinaryReaderMethods\ChunkedFileReader.cs" />
     <Compile Include="BinaryReaderMethods\FileReadAllBytesFileReader.cs" />

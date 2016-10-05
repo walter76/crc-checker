@@ -107,6 +107,8 @@ namespace FileIoPerformanceComparer
                 "File Stream File Reader", (filename) => FileStreamFileReader.ReadFile(filename));
             AddBinaryReaderMethod(
                 "File Read All Bytes File Reader", (filename) => FileReadAllBytesFileReader.ReadFile(filename));
+            AddBinaryReaderMethod(
+                "Win32 File IO Reader", (filename) => Win32FileIOReader.ReadAllBytes(filename));
 
             SelectedBinaryReaderMethod = BinaryReaderMethodList.First();
         }
@@ -145,6 +147,11 @@ namespace FileIoPerformanceComparer
                                 AverageTimeMs = timeMs
                             }));
                 }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
             }
             finally
             {
