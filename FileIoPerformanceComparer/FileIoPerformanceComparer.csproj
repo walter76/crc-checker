@@ -76,6 +76,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BinaryReaderViewModel.cs" />
     <Compile Include="ChunkedFileReader.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="ResultViewModel.cs" />

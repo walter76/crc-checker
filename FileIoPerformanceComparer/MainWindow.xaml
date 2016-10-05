@@ -22,36 +22,54 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
 
-                <TextBlock Margin="2">Filename:</TextBlock>
-                <TextBox Grid.Column="1"
-                         Margin="2"
-                         Text="{Binding Filename}" />
-                <Button Grid.Column="2"
-                        Width="20"
-                        Margin="2"
-                        Command="{Binding OpenFileCommand}">
-                    ...
-                </Button>
-
-                <Grid Grid.Row="1" Margin="2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <Button Width="89"
+                    <TextBlock Margin="2">Filename:</TextBlock>
+                    <TextBox Grid.Column="1"
+                             Margin="2"
+                             Text="{Binding Filename}" />
+                    <Button Grid.Column="2"
+                            Width="20"
                             Margin="2"
-                            Command="{Binding StartCommand}">
-                        Start
+                            Command="{Binding OpenFileCommand}">
+                        ...
                     </Button>
+
+                    <TextBlock Grid.Row="1" Margin="2">Binary Read Method:</TextBlock>
+                    <ComboBox Grid.Row="1"
+                              Grid.Column="1"
+                              Margin="2"
+                              DisplayMemberPath="Name"
+                              ItemsSource="{Binding BinaryReaderMethodList}"
+                              SelectedItem="{Binding SelectedBinaryReaderMethod}" />
+
+                    <TextBlock Grid.Row="2" Margin="2">Repetitions:</TextBlock>
+                    <TextBox Grid.Row="2"
+                             Grid.Column="1"
+                             Margin="2"
+                             Text="{Binding Repetitions}" />
                 </Grid>
+
+                <Button Grid.Row="1"
+                        Width="89"
+                        Margin="2"
+                        Command="{Binding StartCommand}">
+                    Start
+                </Button>
+
             </Grid>
         </Border>
 

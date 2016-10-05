@@ -3,7 +3,7 @@ using System.IO;
 
 namespace FileIoPerformanceComparer
 {
-    class ChunkedFileReader
+    internal class ChunkedFileReader
     {
         public static byte[] ReadFile(string filename)
         {
