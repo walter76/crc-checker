@@ -100,6 +100,12 @@ namespace FileIoPerformanceComparer
         {
             AddBinaryReaderMethod(
                 "Chunked File Reader", (filename) => ChunkedFileReader.ReadFile(filename));
+            AddBinaryReaderMethod(
+                "Pinned Buffer Chunked File Reader", (filename) => PinnedBufferChunkedFileReader.ReadFile(filename));
+            AddBinaryReaderMethod(
+                "File Stream File Reader", (filename) => FileStreamFileReader.ReadFile(filename));
+            AddBinaryReaderMethod(
+                "File Read All Bytes File Reader", (filename) => FileReadAllBytesFileReader.ReadFile(filename));
 
             SelectedBinaryReaderMethod = BinaryReaderMethodList.First();
         }
