@@ -54,7 +54,26 @@ all the information, I provide both links.
 
 ### Windows Performance Recorder
 
-*(Ed: Add description for Windows Performance Recorder here)*
+The Windows Performance Recorder can be started from the Start-Menu. The window
+shown in the next screenshot will appear on the screen.
+
+![](img/wpr.png)
+
+The screenshot shows, which system information I have selected to be recroded
+by the tool. Now, simply click on the button `Start` to record system
+information.
+
+![](img/wpr-running.png)
+
+The Windows Performance Recorder is now collecting system information. Now, I
+start the test program (see below) in the different scenarios. After the test
+has finished, I will click on `Save` and the final dialog will appear.
+
+![](img/wpr-save.png)
+
+With this dialog I can save the system information to the disk. As the file will
+be very huge and has to be read afterwards by the Windows Performance Analyzer,
+I recommend to save it to a SSD.
 
 ### Windows Performance Analyzer
 
