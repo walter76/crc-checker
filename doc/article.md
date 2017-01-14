@@ -1,36 +1,56 @@
-## The Goal
+## Introduction
 
-The idea is to build a fast implementation for creating checksums from binary files in C#. The solution
-should be able to read all files in a directory and its subdirectories, calculate a CRC32-checksum for
-each file and print the result to the console.
+The idea is to build a fast implementation for creating checksums from binary
+files in C#. The solution should be able to read all files in a directory and
+its subdirectories, calculate a CRC32-checksum for each file and print the
+result to the console.
 
-I am aware that there are already a lot of CRC-Checkers available. My goal is not only to have a fast
-implementation, but also to learn something along the way about optimization and performance analysis
+I am aware that there are already a lot of good CRC-Checkers available. My
+primary goal is not to have a fast implementation, but to learn something about
+optimization (multi-threading) on Windows with .NET and performance analysis
 with the [Windows Performance Toolkit](https://msdn.microsoft.com/en-us/windows/hardware/commercialize/test/wpt/index).
+
+By posting this article I hope that others can also benefit from my learning
+experience.
 
 ## CRC32 Algorithm
 
-A cyclic redundancy check (CRC) is an error-detecting code commonly used in digital networks and storage
-devices to detect accidental changes to raw data. The CRC was invented by W. Wesley Peterson in 1961;
-the 32-bit CRC function of Ethernet and many other standards is the work of several researchers and was
+A cyclic redundancy check (CRC) is an error-detecting code commonly used in
+digital networks and storage devices to detect accidental changes to raw data.
+The CRC was invented by W. Wesley Peterson in 1961; the 32-bit CRC function of
+Ethernet and many other standards is the work of several researchers and was
 published in 1975. (see [Cyclic redundancy check](https://en.wikipedia.org/wiki/Cyclic_redundancy_check))
 
-We will use this algorithm to calculate the checksum for each file in the directory. As I didn't want to
-invent my own implementation of the CRC32, I googled for an solution that is already available. After a
-while I came up with [this](http://www.sanity-free.org/12/crc32_implementation_in_csharp.html) quick-and-
-dirty implementation from Sanity Free Coding. I was unable to find out who is maintaining this page, so
-thanks to whomever provided this implementation and saved some work.
+We will use this algorithm to calculate the checksum for each file in the
+directory. As I didn't want to invent my own implementation of the CRC32, I
+googled for an solution that is already available. After a while I came up with
+[this](http://www.sanity-free.org/12/crc32_implementation_in_csharp.html) quick-
+and-dirty implementation from Sanity Free Coding. I was unable to find out who
+is maintaining this page, so thanks to whomever provided this implementation and
+saved some work.
 
-The implementation will be used in all scenarios later on. I am aware, that there are far more optimized
-versions (e.g. [Efficient CRC32 implementation in C#](http://dev.khsu.ru/el/crc32/)), but as the biggest
-file is around 1 GB and the calculation takes around 3 seconds with a Intel(R) Core(TM) i5-2500K CPU, I
-can live without optimization for now.
+The implementation will be used in all scenarios later on. I am aware, that
+there are far more optimized versions (e.g.
+[Efficient CRC32 implementation in C#](http://dev.khsu.ru/el/crc32/)), but as
+the biggest file is around 1 GB and the calculation takes around 3 seconds with
+a Intel(R) Core(TM) i5-2500K CPU, I can live without optimization of the
+calculation itself for now.
 
 ## Windows Performance Toolkit
 
-The Windows Performance Toolkit can be downloaded from the Microsoft Site. For Windows 10, it is included
-in the Windows Assessment and Deployment Kit. A download link is directly provided at
+The Windows Performance Toolkit (WPT) can be downloaded from the Microsoft Site.
+For Windows 10, it is included in the Windows Assessment and Deployment Kit. A
+download link is directly provided at
 [Windows Performance Toolkit](https://msdn.microsoft.com/en-us/windows/hardware/commercialize/test/wpt/index).
+
+To do performance analysis you will need two tools from the WPT: Windows
+Performance Recorder and Windows Performance Analyzer. The first one is used to
+record performance data and the second for analyzing it. I will describe how I
+was using the tools in the next chapters. If you need more in-depth and hands-on
+information, I highly recommend the [blog from Alois Kraus](http://geekswithblogs.net/akraus1/Default.aspx).
+He had to move his blog from geekswithblogs to another location in 2016
+([Alois Kraus](https://aloiskraus.wordpress.com/)). As I do not know if he moved
+all the information, I provide both links.
 
 ### Windows Performance Recorder
 
@@ -67,7 +87,6 @@ chapter below for details). Therefore they have dependencies to `IPerformanceTra
 `PerformanceMarker`.
 
 ![](img/static-classdiagram-core.png)
-
 
 ### Performance Tracing in Code
 
@@ -187,6 +206,7 @@ The sequence diagram outlines the flow of the optimized implementation.
 
 ## References
 
-*(Ed: Tools used: pandoc, plantuml, Notepad++, Greenshot, Atom Editor)*
+* [Alois Kraus Blog (old)](http://geekswithblogs.net/akraus1/Default.aspx)
+* [Alois Kraus Blog (new)](https://aloiskraus.wordpress.com/)
 
-*(Ed: Add a reference to Alois Blog here)*
+*(Ed: Tools used: pandoc, plantuml, Notepad++, Greenshot, Atom Editor)*
