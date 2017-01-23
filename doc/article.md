@@ -7,7 +7,7 @@ result to the console.
 
 I am aware that there are already a lot of good CRC-Checkers available. My
 primary goal is not to have a fast implementation, but to learn something about
-optimization (multi-threading) on Windows with .NET and performance analysis
+optimization (multi-threading) with C#/.NET on Windows and performance analysis
 with the [Windows Performance Toolkit](https://msdn.microsoft.com/en-us/windows/hardware/commercialize/test/wpt/index).
 
 By posting this article I hope that others can also benefit from my learning
@@ -21,7 +21,7 @@ The CRC was invented by W. Wesley Peterson in 1961; the 32-bit CRC function of
 Ethernet and many other standards is the work of several researchers and was
 published in 1975. (see [Cyclic redundancy check](https://en.wikipedia.org/wiki/Cyclic_redundancy_check))
 
-We will use this algorithm to calculate the checksum for each file in the
+We will use this algorithm to calculate the checksum for each file in a
 directory. As I didn't want to invent my own implementation of the CRC32, I
 googled for an solution that is already available. After a while I came up with
 [this](http://www.sanity-free.org/12/crc32_implementation_in_csharp.html) quick-
@@ -34,50 +34,71 @@ there are far more optimized versions (e.g.
 [Efficient CRC32 implementation in C#](http://dev.khsu.ru/el/crc32/)), but as
 the biggest file is around 1 GB and the calculation takes around 3 seconds with
 a Intel(R) Core(TM) i5-2500K CPU, I can live without optimization of the
-calculation itself for now.
+algorithm itself for now.
 
 ## Windows Performance Toolkit
 
 The Windows Performance Toolkit (WPT) can be downloaded from the Microsoft Site.
 For Windows 10, it is included in the Windows Assessment and Deployment Kit. A
-download link is directly provided at
+download link is provided by Microsoft at
 [Windows Performance Toolkit](https://msdn.microsoft.com/en-us/windows/hardware/commercialize/test/wpt/index).
 
-To do performance analysis you will need two tools from the WPT: Windows
-Performance Recorder and Windows Performance Analyzer. The first one is used to
-record performance data and the second for analyzing it. I will describe how I
-was using the tools in the next chapters. If you need more in-depth and hands-on
-information, I highly recommend the [blog from Alois Kraus](http://geekswithblogs.net/akraus1/Default.aspx).
-He had to move his blog from geekswithblogs to another location in 2016
-([Alois Kraus](https://aloiskraus.wordpress.com/)). As I do not know if he moved
-all the information, I provide both links.
+For performance analysis you will need two tools from the WPT: **Windows
+Performance Recorder** and **Windows Performance Analyzer.** The first one is
+used to record performance data and the second for analyzing. I will briefly
+describe in the next chapters how I was using these tools. If you need more
+in-depth and hands-on information, I strongly recommend the
+[Blog from Alois Kraus](http://geekswithblogs.net/akraus1/Default.aspx).
+In 2016 Alois had to move his Blog from geekswithblogs to another location
+([Alois Kraus](https://aloiskraus.wordpress.com/)). As I do not know if all the
+information has been moved, I provide both links. Another source of information
+is the official documentation from Microsoft.
 
 ### Windows Performance Recorder
 
-The Windows Performance Recorder can be started from the Start-Menu. The window
-shown in the next screenshot will appear on the screen.
+After installation the Windows Performance Recorder can be found in the
+Start-Menu. After starting the application it shows a window like the one in the
+screenshot below.
 
 ![](img/wpr.png)
 
-The screenshot shows, which system information I have selected to be recroded
-by the tool. Now, simply click on the button `Start` to record system
-information.
+The screenshot already shows, which system information I would like to be
+recorded by the tool (tree view in the lower left corner). Now, simply click on
+the button `Start` to record system information.
 
 ![](img/wpr-running.png)
 
-The Windows Performance Recorder is now collecting system information. Now, I
-start the test program (see below) in the different scenarios. After the test
-has finished, I will click on `Save` and the final dialog will appear.
+The Windows Performance Recorder is now using Event Tracing for Windows (ETW) to
+collect diagnostic, troubleshooting and performance data. Now, I start the test
+program (see below) in the different scenarios. After the test has finished, I
+will click on `Save` and the final dialog will appear.
 
 ![](img/wpr-save.png)
 
-With this dialog I can save the system information to the disk. As the file will
-be very huge and has to be read afterwards by the Windows Performance Analyzer,
-I recommend to save it to a SSD.
+With this dialog I can save the collected information to the disk. As the file
+will be very huge (2 GB) and has to be read afterwards by the Windows
+Performance Analyzer, I recommend to save it to a SSD.
 
 ### Windows Performance Analyzer
 
-*(Ed: Add description for Windows Performance Analyzer here)*
+The Windows Performance Analyzer can be found in the Start-Menu as well. After
+starting the application it shows a window like the one in the screenshot below.
+
+![](img/wpa-start-screen.png)
+
+To load the previously recorded ETW data go to the File-Menu and select Open.
+After you have chosen a file and clicked the button to open it, it will take a
+while for it to get loaded. After it has finished you will come up with a screen
+where on the left-hand-side you find a list of various categories and a bigger
+empty space on the right-hand-side which has a tab that is titled "Analysis".
+
+To get the data visualized, you can navigate the tree on the left-hand-side and
+drag&drop different graphs to the right-hand-side. The screenshot below shows
+the sampled CPU Usage by process.
+
+![](img/wpa-analysis.png)
+
+*(Ed: Add some more information regarding the navigation on the right-hand-side here)*
 
 ## Test Setup
 
@@ -227,5 +248,6 @@ The sequence diagram outlines the flow of the optimized implementation.
 
 * [Alois Kraus Blog (old)](http://geekswithblogs.net/akraus1/Default.aspx)
 * [Alois Kraus Blog (new)](https://aloiskraus.wordpress.com/)
+* [Part 1 - ETW Introduction and Overview](https://blogs.msdn.microsoft.com/ntdebugging/2009/08/27/part-1-etw-introduction-and-overview/)
 
 *(Ed: Tools used: pandoc, plantuml, Notepad++, Greenshot, Atom Editor)*
